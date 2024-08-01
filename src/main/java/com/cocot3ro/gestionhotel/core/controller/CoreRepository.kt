@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
 class CoreRepository {
 
-    @GetMapping("/ping")
+    @GetMapping(
+        value = ["/ping"],
+        produces = ["text/plain"]
+    )
     fun ping(): String {
         return "pong"
     }
