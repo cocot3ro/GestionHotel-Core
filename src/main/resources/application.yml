@@ -5,7 +5,9 @@ spring:
     url: jdbc:h2:file:~/almacenDB
     driver-class-name: org.h2.Driver
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
     open-in-view: false
+  rsocket:
+    server:
+      port: 7000
