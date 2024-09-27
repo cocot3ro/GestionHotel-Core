@@ -83,6 +83,9 @@ jobs:
       shell: cmd
       run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout && set VERSION=%project.version% >> %GITHUB_ENV%
 
+    - name: Check project version
+      run: echo $VERSION
+
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
       run: mvn clean package
@@ -93,11 +96,11 @@ jobs:
       run: |
         jpackage --type ${{ matrix.package_type }} ^
         --input target/ ^
-        --main-jar GestionHotel-Core-${{ env.VERSION }}.jar ^
+        --main-jar GestionHotel-Core-$VERSION.jar ^
         --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
         --name "GestionHotel_Core" ^
         --dest target/installer ^
-        --app-version ${{ env.VERSION }}
+        --app-version %VERSION%
 
     - name: Upload MSI & EXE Installers
       uses: actions/upload-artifact@v4
