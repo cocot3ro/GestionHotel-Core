@@ -33,8 +33,7 @@ jobs:
 
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
-      run: |
-        mvn clean package
+      run: mvn clean package
 
     - name: Get project version
       id: get-version
@@ -49,7 +48,7 @@ jobs:
         --main-jar GestionHotel-Core-${{ env.VERSION }}.jar \
         --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
         --name "GestionHotel_Core" \
-        --dest target/installer
+        --dest target/installer \
         --app-version ${{ env.VERSION }}
 
     - name: Upload DEB & RPM Installers
@@ -79,13 +78,12 @@ jobs:
 
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
-      run: |
-        mvn clean package
+      run: mvn clean package
 
     - name: Get project version
       id: get-version
       working-directory: GestionHotel-Core
-      run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" | Out-File -Append -FilePath $env:GITHUB_ENV
 
     - name: Generate MSI & EXE Installers
       working-directory: ./GestionHotel-Core
