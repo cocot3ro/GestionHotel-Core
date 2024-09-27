@@ -13,7 +13,7 @@ jobs:
   # build-linux:
   #   runs-on: ubuntu-latest
 
-  #   if: github.event.pull_request.merged == true
+  #   if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
 
   #   strategy:
   #     matrix:
@@ -58,7 +58,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
 
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
 
     strategy:
       matrix:
@@ -135,5 +135,5 @@ jobs:
         files: |
           ./msi-installer/*.msi
           ./exe-installer/*.exe
-          ./deb-installer/*.deb
-          ./rpm-installer/*.rpm
+        # ./deb-installer/*.deb
+        # ./rpm-installer/*.rpm
