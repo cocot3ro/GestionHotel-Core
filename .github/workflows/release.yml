@@ -107,55 +107,58 @@ jobs:
       working-directory: GestionHotel-Core
       run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-    - name: Log
-      run: ls -laR
-
-    - name: Download Installers Artifacts
+    - name: Download MSI Installer Artifact
       uses: actions/download-artifact@v4
-
-    - name: Log
-      run: ls -laR
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ env.VERSION }}
-        release_name: v${{ env.VERSION }}
-        draft: false
-        prerelease: false
-        body: "Release of version ${{ env.VERSION }}"
+        name: msi-installer
+        path: ./msi-installer
 
     - name: Upload MSI Installer to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: msi-installer/*.msi
+        asset_path: ./msi-installer/*.msi
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.msi
         asset_content_type: application/x-msi
+
+    - name: Download EXE Installer Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: exe-installer
+        path: ./exe-installer
 
     - name: Upload EXE Installer to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: exe-installer/*.exe
+        asset_path: ./exe-installer/*.exe
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.exe
         asset_content_type: application/x-msdownload
+
+    - name: Download DEB Installer Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: deb-installer
+        path: ./deb-installer
 
     - name: Upload DEB Installer to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: deb-installer/*.deb
+        asset_path: ./deb-installer/*.deb
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.deb
         asset_content_type: application/vnd.debian.binary-package
+
+    - name: Download RPM Installer Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: rpm-installer
+        path: ./rpm-installer
 
     - name: Upload RPM Installer to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: rpm-installer/*.rpm
+        asset_path: ./rpm-installer/*.rpm
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.rpm
         asset_content_type: application/x-rpm
