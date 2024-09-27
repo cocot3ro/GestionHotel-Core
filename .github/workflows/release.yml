@@ -48,7 +48,7 @@ jobs:
     - name: Upload DEB & RPM Installers
       uses: actions/upload-artifact@v4
       with:
-        name: BuildArtifacts
+        name: LinuxArtifacts
         path: |
           GestionHotel-Core/target/installer/*.deb
           GestionHotel-Core/target/installer/*.rpm
@@ -82,7 +82,7 @@ jobs:
     - name: Upload MSI & EXE Installers
       uses: actions/upload-artifact@v4
       with:
-        name: BuildArtifacts
+        name: WindowsArtifacts
         path: |
           GestionHotel-Core/target/installer/*.msi
           GestionHotel-Core/target/installer/*.exe
