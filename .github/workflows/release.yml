@@ -41,7 +41,7 @@ jobs:
       working-directory: GestionHotel-Core
       run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-    - name: Generate DEB & RPM Installers
+    - name: Generate ${{ matrix.package_type }} installer
       working-directory: ./GestionHotel-Core
       run: |
         jpackage --type ${{ matrix.package_type }} \
@@ -52,7 +52,7 @@ jobs:
         --dest target/installer \
         --app-version ${{ env.VERSION }}
 
-    - name: Upload DEB & RPM Installers
+    - name: Upload ${{ matrix.package_type }} installer
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.package_type }}-installer
@@ -68,51 +68,46 @@ jobs:
         package_type: [msi, exe]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Java 21
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
 
-    - name: Get project version
-      id: get-version
-      working-directory: GestionHotel-Core
-      run: |
-        mvn help:evaluate -Dexpression=project.version -q -DforceStdout >> version.tmp
-        set /P VERSION=<version.tmp
-        echo "VERSION=%VERSION%" >> $env:GITHUB_ENV
-        del version.tmp
+      - name: Build with Maven
+        working-directory: ./GestionHotel-Core
+        run: mvn clean package
 
-    - name: Check project version
-      # Get the project version from the environment and print it
-      run: |
-        echo ${{ env.VERSION }}
-        echo $env:VERSION
+      - name: Get project version
+        id: get-version
+        working-directory: GestionHotel-Core
+        run: |
+          "VERSION=$(mvn help:evaluate '-Dexpression=project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
+      
+      - name: Check Version
+        run: |
+          echo "VERSION=$env:VERSION"
+          echo "VERSION=${{ env.VERSION }}"
 
-    - name: Build with Maven
-      working-directory: ./GestionHotel-Core
-      run: mvn clean package
+      - name: Generate ${{ matrix.package_type }} installer
+        working-directory: ./GestionHotel-Core
+        run: |
+          jpackage --type ${{ matrix.package_type }} \
+          --input target/ \
+          --main-jar GestionHotel-Core-$env:VERSION.jar \
+          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+          --name "GestionHotel_Core" \
+          --dest target/installer \
+          --app-version $env:VERSION
 
-    - name: Generate MSI & EXE Installers
-      working-directory: ./GestionHotel-Core
-      shell: cmd
-      run: |
-        jpackage --type ${{ matrix.package_type }} ^
-        --input target/ ^
-        --main-jar GestionHotel-Core-$VERSION.jar ^
-        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
-        --name "GestionHotel_Core" ^
-        --dest target/installer ^
-        --app-version %VERSION%
-
-    - name: Upload MSI & EXE Installers
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.package_type }}-installer
-        path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
+      - name: Upload ${{ matrix.package_type }} nstaller
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package_type }}-installer
+          path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
 
   release:
     needs: 
