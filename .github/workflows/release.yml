@@ -83,10 +83,9 @@ jobs:
     - name: Get project version
       id: get-version
       working-directory: GestionHotel-Core
-      shell: pwsh
       run: |
-        $version = & mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-        echo "VERSION=$version" >> $GITHUB_ENV
+        set version=mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+        echo VERSION=%version% >> %GITHUB_ENV%
 
     - name: Generate MSI & EXE Installers
       working-directory: ./GestionHotel-Core
