@@ -80,7 +80,8 @@ jobs:
     - name: Get project version
       id: get-version
       working-directory: GestionHotel-Core
-      run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      shell: cmd
+      run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout && set VERSION=%project.version% >> %GITHUB_ENV%
 
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
