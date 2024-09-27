@@ -50,8 +50,8 @@ jobs:
       with:
         name: BuildArtifacts
         path: |
-          target/installer/*.deb
-          target/installer/*.rpm
+          GestionHotel-Core/target/installer/*.deb
+          GestionHotel-Core/target/installer/*.rpm
 
   build-windows:
     runs-on: windows-latest
@@ -84,8 +84,8 @@ jobs:
       with:
         name: BuildArtifacts
         path: |
-          target/installer/*.msi
-          target/installer/*.exe
+          GestionHotel-Core/target/installer/*.msi
+          GestionHotel-Core/target/installer/*.exe
 
   release:
     needs: 
