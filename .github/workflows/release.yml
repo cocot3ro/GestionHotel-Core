@@ -82,7 +82,7 @@ jobs:
 
     - name: Get project version
       id: get-version
-      working-directory: myJavaMavenProyect
+      working-directory: GestionHotel-Core
       run: |
         for /f "delims=" %%i in ('mvn help:evaluate -Dexpression=project.version -q -DforceStdout') do set version=%%i
         echo VERSION=%version% >> $GITHUB_ENV
