@@ -107,6 +107,9 @@ jobs:
       working-directory: GestionHotel-Core
       run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+    - name: Log
+      run: ls -laR
+
     - name: Download Installers Artifacts
       uses: actions/download-artifact@v4
 
@@ -120,7 +123,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.VERSION }}
-        release_name: Release v${{ env.VERSION }}
+        release_name: v${{ env.VERSION }}
         draft: false
         prerelease: false
         body: "Release of version ${{ env.VERSION }}"
