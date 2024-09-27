@@ -110,6 +110,9 @@ jobs:
       working-directory: GestionHotel-Core
       run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
