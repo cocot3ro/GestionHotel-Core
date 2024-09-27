@@ -86,24 +86,19 @@ jobs:
         working-directory: GestionHotel-Core
         run: |
           "VERSION=$(mvn help:evaluate '-Dexpression=project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
-      
-      - name: Check Version
-        run: |
-          echo "VERSION=$env:VERSION"
-          echo "VERSION=${{ env.VERSION }}"
 
       - name: Generate ${{ matrix.package_type }} installer
         working-directory: ./GestionHotel-Core
         run: |
-          jpackage --type ${{ matrix.package_type }} \
-          --input target/ \
-          --main-jar GestionHotel-Core-$env:VERSION.jar \
-          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
-          --name "GestionHotel_Core" \
-          --dest target/installer \
-          --app-version $env:VERSION
+          jpackage --type ${{ matrix.package_type }} ^
+          --input target/ ^
+          --main-jar GestionHotel-Core-${{ env.VERSION }}.jar ^
+          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
+          --name "GestionHotel_Core" ^
+          --dest target/installer ^
+          --app-version ${{ env.VERSION }}
 
-      - name: Upload ${{ matrix.package_type }} nstaller
+      - name: Upload ${{ matrix.package_type }} installer
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.package_type }}-installer
