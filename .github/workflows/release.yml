@@ -107,8 +107,14 @@ jobs:
       working-directory: GestionHotel-Core
       run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-    - name: Create GitHub Release
-      id: create-release
+    - name: Download Installers Artifacts
+      uses: actions/download-artifact@v4
+
+    - name: Log
+      run: ls -la
+
+    - name: Create Release
+      id: create_release
       uses: actions/create-release@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,7 +128,7 @@ jobs:
     - name: Upload MSI Installer to Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: GestionHotel-Core/target/installer/*.msi
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.msi
         asset_content_type: application/x-msi
@@ -130,7 +136,7 @@ jobs:
     - name: Upload EXE Installer to Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: GestionHotel-Core/target/installer/*.exe
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.exe
         asset_content_type: application/x-msdownload
@@ -138,7 +144,7 @@ jobs:
     - name: Upload DEB Installer to Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: GestionHotel-Core/target/installer/*.deb
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.deb
         asset_content_type: application/vnd.debian.binary-package
@@ -146,7 +152,7 @@ jobs:
     - name: Upload RPM Installer to Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: GestionHotel-Core/target/installer/*.rpm
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.rpm
         asset_content_type: application/x-rpm
