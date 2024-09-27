@@ -1,0 +1,132 @@
+name: Build and Release GestionHotel-Core Application
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Build with Maven
+      working-directory: ./GestionHotel-Core
+      run: |
+        mvn clean package
+        mv target/GestionHotel-Core*.jar target/GestionHotel-Core.jar
+
+    - name: Generate DEB & RPM Installers
+      working-directory: ./GestionHotel-Core
+      run: |
+        jpackage --type deb \
+        --input target/ \
+        --main-jar GestionHotel-Core.jar \
+        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+        --name "GestionHotel Core" \
+        --dest target/installer
+
+        jpackage --type rpm \
+        --input target/ \
+        --main-jar GestionHotel-Core.jar \
+        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+        --name "GestionHotel Core" \
+        --dest target/installer
+
+    - name: Upload DEB & RPM Installers
+      uses: actions/upload-artifact@v3
+      with:
+        name: BuildArtifacts
+        path: |
+          target/installer/*.deb
+          target/installer/*.rpm
+
+  build-windows:
+    runs-on: windows-latest
+    if: github.event.pull_request.merged == true
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Build with Maven
+      working-directory: ./GestionHotel-Core
+      run: |
+        mvn clean package
+        mv target/GestionHotel-Core*.jar target/GestionHotel-Core.jar
+
+    - name: Generate MSI & EXE Installers
+      working-directory: ./GestionHotel-Core
+      run: |
+        jpackage --type msi \
+        --input target/ \
+        --main-jar GestionHotel-Core.jar \
+        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+        --name "GestionHotel Core" \
+        --dest target/installer
+
+        jpackage --type exe \
+        --input target/ \
+        --main-jar GestionHotel-Core.jar \
+        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+        --name "GestionHotel Core" \
+        --dest target/installer
+
+    - name: Upload MSI & EXE Installers
+      uses: actions/upload-artifact@v3
+      with:
+        name: BuildArtifacts
+        path: |
+          target/installer/*.msi
+          target/installer/*.exe
+
+  release:
+    needs: 
+      - build-linux
+      - build-windows
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Get project version
+      id: get-version
+      working-directory: GestionHotel-Core
+      run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ env.VERSION }}
+        release_name: Release v${{ env.VERSION }}
+        draft: false
+        prerelease: false
+        body: "Release of version ${{ env.VERSION }}"
+        files: |
+          GestionHotel-Core/target/installer/*.msi
+          GestionHotel-Core/target/installer/*.exe
+          GestionHotel-Core/target/installer/*.deb
+          GestionHotel-Core/target/installer/*.rpm
