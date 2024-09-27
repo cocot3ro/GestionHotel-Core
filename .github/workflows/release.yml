@@ -83,7 +83,7 @@ jobs:
       run: |
         mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.tmp
         set VERSION=<version.tmp
-        echo VERSION=%version% >> %GITHUB_ENV%
+        echo VERSION=%version% >> $GITHUB_ENV
 
     - name: Check Version
       run: |
