@@ -85,6 +85,10 @@ jobs:
         set VERSION=<version.tmp
         echo VERSION=%version% >> %GITHUB_ENV%
 
+    - name: Check Version
+      run: |
+        echo ${{ env.VERSION }}
+
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
       run: mvn clean package
