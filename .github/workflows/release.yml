@@ -127,6 +127,8 @@ jobs:
 
     - name: Upload MSI Installer to Release
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./msi-installer/*.msi
@@ -141,6 +143,8 @@ jobs:
 
     - name: Upload EXE Installer to Release
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./exe-installer/*.exe
@@ -155,6 +159,8 @@ jobs:
 
     - name: Upload DEB Installer to Release
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./deb-installer/*.deb
@@ -169,6 +175,8 @@ jobs:
 
     - name: Upload RPM Installer to Release
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./rpm-installer/*.rpm
