@@ -80,7 +80,6 @@ jobs:
     - name: Get project version
       id: get-version
       working-directory: GestionHotel-Core
-      shell: cmd
       run: |
         mvn help:evaluate -Dexpression=project.version -q -DforceStdout >> version.tmp
         set /P VERSION=<version.tmp
@@ -89,7 +88,6 @@ jobs:
 
     - name: Check project version
       # Get the project version from the environment and print it
-      shell: cmd
       run: |
         echo ${{ env.VERSION }}
         echo $env:VERSION
