@@ -74,19 +74,9 @@ jobs:
     - name: Generate MSI & EXE Installers
       working-directory: ./GestionHotel-Core
       run: |
-        jpackage --type msi \
-        --input target/ \
-        --main-jar GestionHotel-Core.jar \
-        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
-        --name "GestionHotel Core" \
-        --dest target/installer
-
-        jpackage --type exe \
-        --input target/ \
-        --main-jar GestionHotel-Core.jar \
-        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
-        --name "GestionHotel Core" \
-        --dest target/installer
+        jpackage --type msi --input target/ --main-jar GestionHotel-Core.jar --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication --name "GestionHotel Core" --dest target/installer
+        
+        jpackage --type exe --input target/ --main-jar GestionHotel-Core.jar --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication --name "GestionHotel Core" --dest target/installer
 
     - name: Upload MSI & EXE Installers
       uses: actions/upload-artifact@v3
