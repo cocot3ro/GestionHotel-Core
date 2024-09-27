@@ -84,7 +84,8 @@ jobs:
       id: get-version
       working-directory: GestionHotel-Core
       run: |
-        set version=mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+        mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.tmp
+        set VERSION=<version.tmp
         echo VERSION=%version% >> %GITHUB_ENV%
 
     - name: Generate MSI & EXE Installers
