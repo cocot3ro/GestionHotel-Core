@@ -83,6 +83,7 @@ jobs:
     - name: Get project version
       id: get-version
       working-directory: GestionHotel-Core
+      shell: cmd
       run: |
         mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.tmp
         set VERSION=<version.tmp
