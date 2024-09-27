@@ -20,7 +20,9 @@ jobs:
 
     strategy:
       matrix:
-        package_type: [deb, rpm, msi, exe]
+        package_type: [
+#          deb, rpm,
+                       msi, exe]
 
     steps:
     - name: Checkout code
