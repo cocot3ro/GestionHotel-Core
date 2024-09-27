@@ -13,35 +13,14 @@ on:
 
 jobs:
 
-  get-version-project:
-    runs-on: ubuntu-latest
-    outputs:
-        version: ${{ steps.get-version.outputs.version }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-
-      - name: Get Version
-        working-directory: GestionHotel-Core
-        id: get-version
-        run: echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
-
   build-linux:
     runs-on: ubuntu-latest
-
-    needs: get-version-project
 
     # if: github.event.pull_request.merged == true
 
     strategy:
       matrix:
-        package_type: [deb, rpm]
+        package_type: [deb, rpm, msi, exe]
 
     steps:
     - name: Checkout code
@@ -79,58 +58,56 @@ jobs:
         name: ${{ matrix.package_type }}-installer
         path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
 
-  build-windows:
-    runs-on: windows-latest
-
-    needs: get-version-project
-
-    # if: github.event.pull_request.merged == true
-
-    strategy:
-      matrix:
-        package_type: [msi, exe]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Java 21
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
-
-    - name: Check Version
-      run: |
-        echo VERSION=${{ steps.get-version-project.outputs.version }}
-        echo VERSION=${{ steps.get-version-project.outputs.version }} >> $GITHUB_ENV
-
-    - name: Build with Maven
-      working-directory: ./GestionHotel-Core
-      run: mvn clean package
-
-    - name: Generate MSI & EXE Installers
-      working-directory: ./GestionHotel-Core
-      shell: cmd
-      run: |
-        jpackage --type ${{ matrix.package_type }} ^
-        --input target/ ^
-        --main-jar GestionHotel-Core-${{ env.VERSION }}.jar ^
-        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
-        --name "GestionHotel_Core" ^
-        --dest target/installer ^
-        --app-version ${{ env.VERSION }}
-
-    - name: Upload MSI & EXE Installers
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.package_type }}-installer
-        path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
+#  build-windows:
+#    runs-on: windows-latest
+#
+#    # if: github.event.pull_request.merged == true
+#
+#    strategy:
+#      matrix:
+#        package_type: [msi, exe]
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Set up Java 21
+#      uses: actions/setup-java@v4
+#      with:
+#        distribution: 'temurin'
+#        java-version: '21'
+#
+#    - name: Check Version
+#      run: |
+#        echo VERSION=${{ steps.get-version-project.outputs.version }}
+#        echo VERSION=${{ steps.get-version-project.outputs.version }} >> $GITHUB_ENV
+#
+#    - name: Build with Maven
+#      working-directory: ./GestionHotel-Core
+#      run: mvn clean package
+#
+#    - name: Generate MSI & EXE Installers
+#      working-directory: ./GestionHotel-Core
+#      shell: cmd
+#      run: |
+#        jpackage --type ${{ matrix.package_type }} ^
+#        --input target/ ^
+#        --main-jar GestionHotel-Core-${{ env.VERSION }}.jar ^
+#        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
+#        --name "GestionHotel_Core" ^
+#        --dest target/installer ^
+#        --app-version ${{ env.VERSION }}
+#
+#    - name: Upload MSI & EXE Installers
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: ${{ matrix.package_type }}-installer
+#        path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
 
   release:
     needs: 
       - build-linux
-      - build-windows
+#      - build-windows
     runs-on: ubuntu-latest
 
     steps:
