@@ -84,7 +84,8 @@ jobs:
       run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout && set VERSION=%project.version% >> %GITHUB_ENV%
 
     - name: Check project version
-      run: echo %VERSION%
+      # Get the project version from the environment and print it
+      run: echo ${{ env.VERSION }}
 
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
