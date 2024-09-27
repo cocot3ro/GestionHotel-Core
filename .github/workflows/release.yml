@@ -90,12 +90,12 @@ jobs:
       - name: Generate ${{ matrix.package_type }} installer
         working-directory: ./GestionHotel-Core
         run: |
-          jpackage --type ${{ matrix.package_type }} ^
-          --input target/ ^
-          --main-jar GestionHotel-Core-${{ env.VERSION }}.jar ^
-          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication ^
-          --name "GestionHotel_Core" ^
-          --dest target/installer ^
+          jpackage --type ${{ matrix.package_type }} `
+          --input target/ `
+          --main-jar GestionHotel-Core-${{ env.VERSION }}.jar `
+          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication `
+          --name "GestionHotel_Core" `
+          --dest target/installer `
           --app-version ${{ env.VERSION }}
 
       - name: Upload ${{ matrix.package_type }} installer
