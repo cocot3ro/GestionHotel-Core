@@ -132,7 +132,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GestionHotel-Core/target/installer/*.msi
+        asset_path: msi-installer/*.msi
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.msi
         asset_content_type: application/x-msi
 
@@ -140,7 +140,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GestionHotel-Core/target/installer/*.exe
+        asset_path: exe-installer/*.exe
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.exe
         asset_content_type: application/x-msdownload
 
@@ -148,7 +148,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GestionHotel-Core/target/installer/*.deb
+        asset_path: deb-installer/*.deb
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.deb
         asset_content_type: application/vnd.debian.binary-package
 
@@ -156,6 +156,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: GestionHotel-Core/target/installer/*.rpm
+        asset_path: rpm-installer/*.rpm
         asset_name: GestionHotel-Core-v${{ env.VERSION }}.rpm
         asset_content_type: application/x-rpm
