@@ -11,7 +11,13 @@ on:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    
     # if: github.event.pull_request.merged == true
+
+    strategy:
+      matrix:
+        package_type: [deb, rpm]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -31,14 +37,7 @@ jobs:
     - name: Generate DEB & RPM Installers
       working-directory: ./GestionHotel-Core
       run: |
-        jpackage --type deb \
-        --input target/ \
-        --main-jar GestionHotel-Core.jar \
-        --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
-        --name "GestionHotel Core" \
-        --dest target/installer
-
-        jpackage --type rpm \
+        jpackage --type ${{ matrix.package_type }} \
         --input target/ \
         --main-jar GestionHotel-Core.jar \
         --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
@@ -48,14 +47,18 @@ jobs:
     - name: Upload DEB & RPM Installers
       uses: actions/upload-artifact@v4
       with:
-        name: LinuxArtifacts
-        path: |
-          GestionHotel-Core/target/installer/*.deb
-          GestionHotel-Core/target/installer/*.rpm
+        name: ${{ matrix.package_type }}-installer
+        path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
 
   build-windows:
     runs-on: windows-latest
+
     # if: github.event.pull_request.merged == true
+
+    strategy:
+      matrix:
+        package_type: [msi, exe]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -75,17 +78,13 @@ jobs:
     - name: Generate MSI & EXE Installers
       working-directory: ./GestionHotel-Core
       run: |
-        jpackage --type msi --input target/ --main-jar GestionHotel-Core.jar --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication --name "GestionHotel Core" --dest target/installer
-
-        jpackage --type exe --input target/ --main-jar GestionHotel-Core.jar --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication --name "GestionHotel Core" --dest target/installer
+        jpackage --type ${{ matrix.package_type }} --input target/ --main-jar GestionHotel-Core.jar --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication --name "GestionHotel Core" --dest target/installer
 
     - name: Upload MSI & EXE Installers
       uses: actions/upload-artifact@v4
       with:
-        name: WindowsArtifacts
-        path: |
-          GestionHotel-Core/target/installer/*.msi
-          GestionHotel-Core/target/installer/*.exe
+        name: ${{ matrix.package_type }}-installer
+        path: GestionHotel-Core/target/installer/*.${{ matrix.package_type }}
 
   release:
     needs: 
