@@ -89,6 +89,7 @@ jobs:
 
     - name: Check project version
       # Get the project version from the environment and print it
+      shell: cmd
       run: |
         echo ${{ env.VERSION }}
         echo $env:VERSION
