@@ -80,27 +80,16 @@ jobs:
       id: get-version-test
       working-directory: GestionHotel-Core
       shell: cmd
-      run: |
-        mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.tmp
-        set VERSION=<version.tmp
-        echo VERSION=%version% >> $GITHUB_ENV
+      run: | # This runs on Windows
+        echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
     - name: Check Version
       run: |
-        echo ${{ env.VERSION }}
+        echo VERSION=${{ env.VERSION }}
 
     - name: Build with Maven
       working-directory: ./GestionHotel-Core
       run: mvn clean package
-
-    - name: Get project version
-      id: get-version
-      working-directory: GestionHotel-Core
-      shell: cmd
-      run: |
-        mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.tmp
-        set VERSION=<version.tmp
-        echo VERSION=%version% >> %GITHUB_ENV%
 
     - name: Generate MSI & EXE Installers
       working-directory: ./GestionHotel-Core
