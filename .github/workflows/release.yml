@@ -111,7 +111,7 @@ jobs:
       uses: actions/download-artifact@v4
 
     - name: Log
-      run: ls -la
+      run: ls -laR
 
     - name: Create Release
       id: create_release
