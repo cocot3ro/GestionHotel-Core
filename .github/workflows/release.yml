@@ -44,7 +44,7 @@ jobs:
   #       jpackage --type ${{ matrix.package_type }} \
   #       --input target/ \
   #       --main-jar GestionHotel-Core-${{ env.VERSION }}.jar \
-  #       --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication \
+  #       --main-class org.springframework.boot.loader.launch.JarLauncher \
   #       --name "GestionHotel_Core" \
   #       --dest target/installer \
   #       --app-version ${{ env.VERSION }}
@@ -90,7 +90,7 @@ jobs:
           jpackage --type ${{ matrix.package_type }} `
           --input target/ `
           --main-jar GestionHotel-Core-${{ env.VERSION }}.jar `
-          --main-class com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication `
+          --main-class org.springframework.boot.loader.launch.JarLauncher `
           --name "GestionHotel_Core" `
           --dest target/installer `
           --app-version ${{ env.VERSION }}

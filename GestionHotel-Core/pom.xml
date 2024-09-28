@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cocot3ro.gestionhotel</groupId>
     <artifactId>GestionHotel-Core</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <name>GestionHotel-Core</name>
     <description>GestionHotel-Core</description>
     <url/>
@@ -141,6 +141,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.cocot3ro.gestionhotel.core.GestionHotelCoreApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
