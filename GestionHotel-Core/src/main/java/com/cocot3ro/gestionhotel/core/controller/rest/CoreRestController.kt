@@ -3,10 +3,12 @@ package com.cocot3ro.gestionhotel.core.controller.rest
 import com.cocot3ro.gestionhotel.core.controller.ICoreController
 import com.cocot3ro.gestionhotel.core.service.CoreService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 
-@RestController("/api/core")
+@RestController
+@RequestMapping("/api/core")
 class CoreRestController(private val coreService: CoreService) : ICoreController {
 
     @GetMapping("/status")
