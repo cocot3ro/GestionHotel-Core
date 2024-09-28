@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 
-@RestController
+@RestController("/api/core")
 class CoreRestController(private val coreService: CoreService) : ICoreController {
 
     @GetMapping("/status")
