@@ -46,15 +46,17 @@ jobs:
           --input target/ `
           --main-jar GestionHotel-Core-${{ env.VERSION }}.jar `
           --main-class org.springframework.boot.loader.launch.JarLauncher `
-          --name "GestionHotel Core" `
-          --win-menu-group "GestionHotel" `
-          --app-version-url "https://cocot3ro.github.io./GestionHotel-Suite" `
           --dest target/installer `
           --app-version ${{ env.VERSION }} `
-          --win-shortcut `
+          --name "GestiónHotel Core" `
+          --about-url "https://cocot3ro.github.io./GestionHotel-Suite" `
+          --win-update-url "https://cocot3ro.github.io./GestionHotel-Suite" `
+          --win-help-url "https://cocot3ro.github.io./GestionHotel-Suite" `
+          --win-shortcut-prompt `
           --win-menu `
+          --win-menu-group "GestiónHotel" `
           --win-dir-chooser `
-          --win-per-user-isntall
+          --win-per-user-install
 
       - name: Upload ${{ matrix.package_type }} installer
         uses: actions/upload-artifact@v4
