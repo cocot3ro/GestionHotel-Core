@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cocot3ro.gestionhotel</groupId>
     <artifactId>GestionHotel-Core</artifactId>
-    <version>1.3.0</version>
+    <version>1.2.3</version>
     <name>GestionHotel-Core</name>
     <description>GestionHotel-Core</description>
     <url/>
